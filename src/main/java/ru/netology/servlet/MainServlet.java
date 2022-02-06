@@ -23,11 +23,7 @@ public class MainServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         final var context = new AnnotationConfigApplicationContext("ru.netology");
-
         final var controller = context.getBean("postContriller");
-
-        final var service= context.getBean(PostService.class);
-
     }
 
     @Override
