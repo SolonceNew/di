@@ -23,7 +23,7 @@ public class MainServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         final var context = new AnnotationConfigApplicationContext("ru.netology");
-        final var controller = context.getBean("postContriller");
+        final var controller = context.getBean("postController");
     }
 
     @Override
@@ -31,20 +31,21 @@ public class MainServlet extends HttpServlet {
         try {
             final var path = req.getRequestURI();
             final var method = req.getMethod();
-            final var id = getIdFromUrl(path);
 
             if (method.equals(GET_METHOD) && path.equals(API_POSTS)) {
                 postController.all(response);
                 return;
             }
             if (method.equals(GET_METHOD) && path.matches(API_POSTS_D)) {
+                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
                 postController.getById(id, response);
                 return;
             }
             if (method.equals(POST_METHOD) && path.equals(API_POSTS)) {
-                postController.save(req.getReader(),response);
+                postController.save(req.getReader(), response);
             }
             if (method.equals(DELETE_METHOD) && path.matches(API_POSTS_D)) {
+                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
                 postController.removeById(id, response);
             }
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -52,9 +53,5 @@ public class MainServlet extends HttpServlet {
             ioException.getMessage();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private long getIdFromUrl(String path) {
-        return Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
     }
 }
