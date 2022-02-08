@@ -2,9 +2,6 @@ package ru.netology.servlet;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
-import ru.netology.repository.PostRepository;
-import ru.netology.service.PostService;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,10 +45,10 @@ public class MainServlet extends HttpServlet {
                 final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
                 postController.removeById(id, response);
             }
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(response.SC_NOT_FOUND);
         } catch (IOException ioException) {
             ioException.getMessage();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
