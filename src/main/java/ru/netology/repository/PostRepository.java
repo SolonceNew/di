@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class PostRepository {
+public class PostRepository implements IRepository {
     private final ConcurrentHashMap<Long, Post> posts;
     private final AtomicLong idCounter = new AtomicLong(1L);
 
@@ -28,15 +28,20 @@ public class PostRepository {
     }
 
     public Post save(Post post) {
-        if (posts.containsKey(post.getId())) {
-            Post changedPost = posts.get(post.getId());
-            changedPost.setContent(post.getContent());
-            return changedPost;
+        if (post.getId() != 0 && !posts.containsKey(post.getId())) {
+            throw new NotFoundException();
+
         } else {
-            post.setId(idCounter.incrementAndGet());
             posts.put(post.getId(), post);
-            return post;
         }
+
+        if(post.getId() == 0) {
+            var newId = idCounter.incrementAndGet();
+            post.setId(newId);
+            posts.put(post.getId(), post);
+        }
+
+        return post;
 
     }
 
