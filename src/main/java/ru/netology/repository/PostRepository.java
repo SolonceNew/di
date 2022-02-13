@@ -1,6 +1,5 @@
 package ru.netology.repository;
 
-import org.springframework.stereotype.Repository;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class PostRepository implements IRepository {
     private final ConcurrentHashMap<Long, Post> posts;
-    private final AtomicLong idCounter = new AtomicLong(1L);
+    private final AtomicLong idCounter = new AtomicLong(0L);
 
     public PostRepository()  {
         posts  = new ConcurrentHashMap<>();
@@ -28,11 +27,12 @@ public class PostRepository implements IRepository {
     }
 
     public Post save(Post post) {
-        if (post.getId() != 0 && !posts.containsKey(post.getId())) {
-            throw new NotFoundException();
-
-        } else {
-            posts.put(post.getId(), post);
+        if (post.getId() != 0) {
+            if (!posts.containsKey(post.getId())) {
+                throw new NotFoundException();
+            } else {
+                posts.put(post.getId(), post);
+            }
         }
 
         if(post.getId() == 0) {
@@ -49,7 +49,7 @@ public class PostRepository implements IRepository {
         if (posts.containsKey(id)) {
             posts.remove(id);
         } else {
-            throw new NotFoundException("Введен неверный id");
+            throw new NotFoundException("Wrong id");
         }
     }
 }

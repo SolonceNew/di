@@ -1,6 +1,5 @@
 package ru.netology.service;
 
-import org.springframework.stereotype.Service;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.IRepository;
