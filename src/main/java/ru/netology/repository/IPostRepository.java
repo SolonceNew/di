@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IPostRepository {
-    public List<Post> all();
+    List<Post> all();
 
-    public Optional<Post> getById(long id);
+    Optional<Post> getById(long id);
 
-    public Post save(Post post);
+    Post save(Post post);
 
-    public void removeById(long id);
+    void removeById(long id);
 
 }
 

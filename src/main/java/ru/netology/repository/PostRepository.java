@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class PostRepository implements IPostRepository {
     private final ConcurrentHashMap<Long, Post> posts;
-    private final AtomicLong idCounter = new AtomicLong(1L);
+    private final AtomicLong idCounter = new AtomicLong(0L);
 
     public PostRepository()  {
         posts  = new ConcurrentHashMap<>();
@@ -28,19 +28,18 @@ public class PostRepository implements IPostRepository {
     }
 
     public Post save(Post post) {
-        if (post.getId() != 0 && !posts.containsKey(post.getId())) {
-            throw new NotFoundException();
-
-        } else {
-            posts.put(post.getId(), post);
+        if (post.getId() != 0L) {
+            if (!posts.containsKey(post.getId())) {
+                throw new NotFoundException();
+            } else {
+                posts.put(post.getId(), post);
+            }
         }
-
-        if(post.getId() == 0) {
+        if(post.getId() == 0L) {
             var newId = idCounter.incrementAndGet();
             post.setId(newId);
             posts.put(post.getId(), post);
         }
-
         return post;
     }
 
@@ -48,7 +47,7 @@ public class PostRepository implements IPostRepository {
         if (posts.containsKey(id)) {
             posts.remove(id);
         } else {
-            throw new NotFoundException("Введен неверный id");
+            throw new NotFoundException("Wrong id");
         }
     }
 }

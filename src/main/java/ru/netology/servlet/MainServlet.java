@@ -2,7 +2,6 @@ package ru.netology.servlet;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +17,9 @@ public class MainServlet extends HttpServlet {
     public static final String DELETE_METHOD = "DELETE";
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         final var context = new AnnotationConfigApplicationContext("ru.netology");
-        final var controller = context.getBean("postController");
+        postController = context.getBean(PostController.class);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class MainServlet extends HttpServlet {
                 return;
             }
             if (method.equals(GET_METHOD) && path.matches(API_POSTS_D)) {
-                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+                final var id = Long.parseLong(path.substring(path.lastIndexOf(STR) + 1));
                 postController.getById(id, response);
                 return;
             }
@@ -42,7 +41,7 @@ public class MainServlet extends HttpServlet {
                 postController.save(req.getReader(), response);
             }
             if (method.equals(DELETE_METHOD) && path.matches(API_POSTS_D)) {
-                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+                final var id = Long.parseLong(path.substring(path.lastIndexOf(STR) + 1));
                 postController.removeById(id, response);
             }
             response.setStatus(response.SC_NOT_FOUND);
