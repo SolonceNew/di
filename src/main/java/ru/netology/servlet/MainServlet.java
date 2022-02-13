@@ -2,6 +2,8 @@ package ru.netology.servlet;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
+import ru.netology.exception.NotFoundException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +46,9 @@ public class MainServlet extends HttpServlet {
                 final var id = Long.parseLong(path.substring(path.lastIndexOf(STR) + 1));
                 postController.removeById(id, response);
             }
+            response.setStatus(response.SC_OK);
+        } catch (NotFoundException e) {
+            e.getMessage();
             response.setStatus(response.SC_NOT_FOUND);
         } catch (IOException ioException) {
             ioException.getMessage();
